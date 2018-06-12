@@ -192,12 +192,12 @@ def heatmap(request):
     time_list = []
     email_data = []
     data_list = []
-    topic_list = []
+    topics_list = []
     myMonthCollection = mydb.month_subject
     myCollection = mydb.topic_list
     data_reader = myCollection.find({},no_cursor_timeout = True).sort([("count",-1)]).limit(10)
     for row in data_reader:
-        topic_list.append(row["subject"])
+        topics_list.append(row["subject"])
         month_reader = myMonthCollection.find({"name":row["subject"]},{"_id":0})
         for item in month_reader:
             time_list.append(item["time"])
@@ -210,16 +210,21 @@ def heatmap(request):
     time_list.sort()
     for row in email_data:
         xLocation = time_list.index(row["time"])
-        yLocation = topic_list.index(row["name"])
+        yLocation = topics_list.index(row["name"])
         count = row["count"]
         data_list.append([
             xLocation,
             yLocation,
             count
         ])
+    # return JsonResponse({
+    #     "topic" : topics_list,
+    #     "time" : time_list,
+    #     "data" : data_list
+    # })
     return JsonResponse({
-        "topic" : topic_list,
-        "time" : time_list,
+        "xLocation" : time_list,
+        "yLocation" : topics_list,
         "data" : data_list
     })
 
