@@ -167,22 +167,64 @@ def line(request):
         
     [inner_list.append(inner_temp_dict[keys]) for keys in time_list]
     [outer_list.append(outer_temp_dict[keys]) for keys in time_list]
+    # return JsonResponse({
+    #     "time" : time_list,
+    #     "inner_data" : inner_list,
+    #     "outer_data" : outer_list
+    # })
+    # github的line
     return JsonResponse({
-        "time":time_list,
-        "inner_data" : inner_list,
-        "outer_data" : outer_list
+        "code":0,
+        "message":"ok",
+        "data":{
+            "time": time_list,
+            "innner": inner_list,
+            "outer":outer_list
+        }
     })
         
-# def heatmap(request):
-#     '''
-#     heatmap
-#     '''
-#     conn = MongoClient("127.0.0.1",27017)
-#     mydb = conn.test
-#     myCollection = mydb.topic_list
-#     data_reader = myCollection.find({}).sort([("count",-1)]).limit(20)
-#     for row in data_reader:
-#         print(row)
+def heatmap(request):
+    '''
+    heatmap
+    '''
+    conn = MongoClient("127.0.0.1",27017)
+    mydb = conn.test
+    time_list = []
+    email_data = []
+    data_list = []
+    topic_list = []
+    myMonthCollection = mydb.month_subject
+    myCollection = mydb.topic_list
+    data_reader = myCollection.find({},no_cursor_timeout = True).sort([("count",-1)]).limit(10)
+    for row in data_reader:
+        topic_list.append(row["subject"])
+        month_reader = myMonthCollection.find({"name":row["subject"]},{"_id":0})
+        for item in month_reader:
+            time_list.append(item["time"])
+            email_data.append({
+                "name" : item["name"],
+                "count" : item["count"],
+                "time" : item["time"]
+            })
+    time_list = list(set(time_list))
+    time_list.sort()
+    for row in email_data:
+        xLocation = time_list.index(row["time"])
+        yLocation = topic_list.index(row["name"])
+        count = row["count"]
+        data_list.append([
+            xLocation,
+            yLocation,
+            count
+        ])
+    return JsonResponse({
+        "topic" : topic_list,
+        "time" : time_list,
+        "data" : data_list
+    })
+
+
+
 
 def api(request):
     conn = MongoClient("127.0.0.1",27017)

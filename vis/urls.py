@@ -21,6 +21,6 @@ urlpatterns = [
     path('pin/',views.pin),
     path('radar/',views.radar),
     path('line/',views.line),
-    # path('heatmap/',views.heatmap),
+    path('heatmap/',views.heatmap),
     path('api/',views.api)
 ]
