@@ -133,7 +133,7 @@ def radar(request):
     })
 def line(request):
     '''
-    graph
+    line
     '''
     conn = MongoClient("127.0.0.1",27017)
     mydb = conn.test
@@ -223,11 +223,19 @@ def heatmap(request):
     #     "data" : data_list
     # })
     return JsonResponse({
-        "xLocation" : time_list,
-        "yLocation" : topics_list,
-        "data" : data_list
+        'code': 0,
+        'message': 'ok',
+        'data':{
+            "xLocation" : time_list,
+            "yLocation" : topics_list,
+            "data" : data_list
+        }
     })
-
+# def graph(request):
+#     conn = MongoClient("127.0.0.1",27017)
+#     mydb = conn.test
+#     myconnCollection = mydb.
+#     return JsonResponse()
 
 
 

@@ -22,5 +22,6 @@ urlpatterns = [
     path('radar/',views.radar),
     path('line/',views.line),
     path('heatmap/',views.heatmap),
-    path('api/',views.api)
+    path('api/',views.api),
+    path('graph/',views.graph)
 ]
