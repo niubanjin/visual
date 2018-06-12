@@ -178,7 +178,7 @@ def line(request):
         "message":"ok",
         "data":{
             "time": time_list,
-            "innner": inner_list,
+            "inner": inner_list,
             "outer":outer_list
         }
     })
